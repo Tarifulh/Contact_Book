@@ -1,7 +1,16 @@
 import json
 contacts = []
-with open("contacts.json", "r") as file:
-    contacts = json.load(file)
+
+def load_contacts():
+    with open("contacts.json", "r") as file:
+        return json.load(file)
+
+    
+contacts = load_contacts()
+
+def save_contacts():
+    with open("contacts.json", "w") as file:
+        json.dump(contacts, file, indent=4)
 
 while True:
     print("=== CONTACT BOOK ===")
@@ -32,31 +41,32 @@ while True:
           }
        contacts.append(contact)
        print("Contact added successfully!")
-       with open("contacts.json", "w") as file:
-            json.dump(contacts, file, indent=4)
+       save_contacts()
 
     if choice == 2:
        search_name = input("Enter name to search: ")
        found = False
-    for contact in contacts:
-         if contact["name"].lower() == search_name.lower():
-            print(contact["name"], "-", contact["phone"])
-            found = True
-            break
-    if not found: 
+       for contact in contacts:
+           if contact["name"].lower() == search_name.lower():
+               print(contact["name"], "-", contact["phone"])
+               found = True
+               break
+
+       if not found: 
              print("Contact not found.")
 
     if choice == 3:
      delete_name = input("Enter name to delete: ")
      found = False
+
     for contact in contacts:
         if contact["name"].lower() == delete_name.lower():
             contacts.remove(contact)
-            with open("contacts.json", "w") as file:
-                 json.dump(contacts, file, indent=4)
+            save_contacts()
             print("Contact deleted")
             found = True
             break
+
     if not found:
             print("Contact not found")
 
